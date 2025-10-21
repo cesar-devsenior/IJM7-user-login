@@ -1,4 +1,4 @@
-package com.devsenior.cdiaz.user_login;
+package com.devsenior.cdiaz.userlogin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
