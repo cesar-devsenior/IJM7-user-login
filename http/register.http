@@ -1,0 +1,23 @@
+### Registrar una ADMIN
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "full_name": "Cesar Augusto Diaz",
+    "username": "cdiaz",
+    "password": "cdiaz123",
+    "email": "cdiaz@email.com",
+    "role": "ADMIN"
+}
+
+### Registrar una USER
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+    "full_name": "Jorge Andres Echavarria",
+    "username": "jechavarria",
+    "password": "jechavarria123",
+    "email": "jechavarria@email.com",
+    "role": "USER"
+}
