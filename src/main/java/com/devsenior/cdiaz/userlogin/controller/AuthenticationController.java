@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsenior.cdiaz.userlogin.model.dto.LoginRequest;
+import com.devsenior.cdiaz.userlogin.model.dto.LoginResponse;
 import com.devsenior.cdiaz.userlogin.model.dto.RegisterRequest;
 import com.devsenior.cdiaz.userlogin.model.dto.RegisterResponse;
 import com.devsenior.cdiaz.userlogin.service.AuthenticationService;
@@ -24,8 +25,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public void login(@RequestBody @Valid LoginRequest body) {
-        authenticationService.login(body);
+    public LoginResponse login(@RequestBody @Valid LoginRequest body) {
+        return authenticationService.login(body);
     }
 
     @ResponseStatus(code = HttpStatus.CREATED)

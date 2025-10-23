@@ -1,11 +1,13 @@
 package com.devsenior.cdiaz.userlogin.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
-import com.devsenior.cdiaz.userlogin.exception.BadLoginException;
 import com.devsenior.cdiaz.userlogin.mapper.UserMapper;
 import com.devsenior.cdiaz.userlogin.model.dto.LoginRequest;
+import com.devsenior.cdiaz.userlogin.model.dto.LoginResponse;
 import com.devsenior.cdiaz.userlogin.model.dto.RegisterRequest;
 import com.devsenior.cdiaz.userlogin.model.dto.RegisterResponse;
 import com.devsenior.cdiaz.userlogin.repository.UserRepository;
@@ -18,7 +20,9 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
 
     @Override
     public RegisterResponse register(RegisterRequest userInfo) {
@@ -39,11 +43,18 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
     }
 
     @Override
-    public void login(LoginRequest credentials) {
-        userRepository.findById(credentials.getUsername())
-                .filter(user -> passwordEncoder.matches(credentials.getPassword(),
-                        user.getPassword()))
-                .orElseThrow(() -> new BadLoginException());
+    public LoginResponse login(LoginRequest credentials) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        credentials.getUsername(),
+                        credentials.getPassword()));
+
+        var userDetails = userDetailsService.loadUserByUsername(credentials.getUsername());
+        var token = jwtService.generateToken(userDetails);
+
+        return LoginResponse.builder()
+                .jwt(token)
+                .build();
     }
 
 }
