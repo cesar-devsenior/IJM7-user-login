@@ -6,5 +6,4 @@ import com.devsenior.cdiaz.userlogin.model.entity.User;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-    boolean existsByUsernameAndPassword(String username, String password);
 }

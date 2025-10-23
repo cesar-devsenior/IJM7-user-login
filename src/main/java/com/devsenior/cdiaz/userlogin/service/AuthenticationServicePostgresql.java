@@ -40,11 +40,10 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
 
     @Override
     public void login(LoginRequest credentials) {
-        if (!userRepository.existsByUsernameAndPassword(
-                credentials.getUsername(),
-                passwordEncoder.encode(credentials.getPassword()))) {
-            throw new BadLoginException();
-        }
+        userRepository.findById(credentials.getUsername())
+                .filter(user -> passwordEncoder.matches(credentials.getPassword(),
+                        user.getPassword()))
+                .orElseThrow(() -> new BadLoginException());
     }
 
 }
