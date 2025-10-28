@@ -44,14 +44,17 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest credentials) {
+        //1. Validar usuario y contraseña - Spring Security
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getUsername(),
                         credentials.getPassword()));
 
+        // 2. Generar el token
         var userDetails = userDetailsService.loadUserByUsername(credentials.getUsername());
         var token = jwtService.generateToken(userDetails);
 
+        // 3. Devolver la respuesta
         return LoginResponse.builder()
                 .jwt(token)
                 .build();

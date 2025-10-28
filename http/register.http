@@ -10,7 +10,7 @@ Content-Type: application/json
     "role": "ADMIN"
 }
 
-### Registrar una USER
+### Registrar un USER
 POST http://localhost:8080/auth/register
 Content-Type: application/json
 

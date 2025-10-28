@@ -33,6 +33,8 @@ public class SecurityConfiguration {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
+                        //.requestMatchers(HttpMethod.POST).hasRole("ADMIN")
+                        //.requestMatchers(HttpMethod.PUT, "/api/books", "/api/authors").hasAuthority("EDITOR")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

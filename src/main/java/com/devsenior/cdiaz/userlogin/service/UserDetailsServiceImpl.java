@@ -24,7 +24,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         var response = User.builder()
                 .username(username)
                 .password(userInfo.getPassword())
-                .roles(userInfo.getRole().toString())
+                .roles(userInfo.getRole().toString()) // ROLE_ADMIN, ROLE_USER
+                //.authorities("EDITOR", "PUBLISHER")
                 .build();
 
         return response;
