@@ -1,5 +1,7 @@
 package com.devsenior.cdiaz.userlogin.service;
 
+import java.util.Map;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -44,7 +46,7 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest credentials) {
-        //1. Validar usuario y contraseña - Spring Security
+        // 1. Validar usuario y contraseña - Spring Security
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getUsername(),
@@ -52,7 +54,14 @@ public class AuthenticationServicePostgresql implements AuthenticationService {
 
         // 2. Generar el token
         var userDetails = userDetailsService.loadUserByUsername(credentials.getUsername());
-        var token = jwtService.generateToken(userDetails);
+        var userInfo = userRepository.findById(credentials.getUsername());
+        Map<String, Object> claims = Map.of();
+        if (userInfo.isPresent()) {
+            claims = Map.<String, Object>of(
+                    "name", userInfo.get().getName(),
+                    "role", userInfo.get().getRole().toString());
+        }
+        var token = jwtService.generateToken(claims, userDetails);
 
         // 3. Devolver la respuesta
         return LoginResponse.builder()

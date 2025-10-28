@@ -45,6 +45,16 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
+    public String extractName(String token){
+        return extractClaim(token, c -> c.get("name").toString());
+    }
+
+    @Override
+    public String extractRole(String token){
+        return extractClaim(token, c -> c.get("role").toString());
+    }
+
+    @Override
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

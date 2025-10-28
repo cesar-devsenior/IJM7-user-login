@@ -11,7 +11,12 @@ public interface JwtService {
 
     String extractUsername(String jwt);
 
+    String extractName(String token);
+
+    String extractRole(String token);
+
     boolean isTokenExpired(String token);
 
     boolean isTokenValid(String token, UserDetails userDetails);
+
 }
